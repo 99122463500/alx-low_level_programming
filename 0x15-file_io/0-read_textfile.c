@@ -1,63 +1,39 @@
 #include "main.h"
+#include <stdlib.h>
 
 /**
- * create_file.
- * @filename: A pointer to name of the fil.
- * @text content: A pointer to the string to write the file.
+ * read_textfile - Reads the text file and also prints it to the POSIX stdout.
+ * @filename: A pointer to the name of a file.
+ * @letters: a number of letters
+ *           function must read and print.
  *
- * Return: If the function fails - 0.
- *         Otherwise 0.
+ * Return: If the function is failing or filename is NULL - 1.
+ *         O/w - the number of bytes and functions can read and print.
  */
-ssize_t read_textfile(const char *filename, size_t letters) {
-    if (filename == NULL) {
-        return 0;
-    }
+ssize_t read_textfile(const char *filename, size_t letters)
+{
+	ssize_t o, r, w;
+	char *buffer;
 
-    FILE *file = fopen(filename, "r");
-    if (file == NULL) {
-        return 0;
-    }
+	if (filename == NULL)
+		return (0);
 
-    char buffer[letters];
-    ssize_t read_bytes = fread(buffer, sizeof(char), letters, file);
-    if (read_bytes < 0) {
-        fclose(file);
-        return 0;
-    }
+	buffer = malloc(sizeof(char) * letters);
+	if (buffer == NULL)
+		return (0);
 
-    ssize_t write_bytes = fwrite(buffer, sizeof(char), read_bytes, stdout);
-    fclose(file);
+	o = open(filename, O_RDONLY);
+	r = read(o, buffer, letters);
+	w = write(STDOUT_FILENO, buffer, r);
 
-    if (write_bytes != read_bytes) {
-        return 0;
-    }
+	if (o == -1 || r == -1 || w == -1 || w != r)
+	{
+		free(buffer);
+		return (0);
+	}
 
-    return write_bytes;
-}#include <stdio.h>
+	free(buffer);
+	close(o);
 
-ssize_t read_textfile(const char *filename, size_t letters) {
-    if (filename == NULL) {
-        return 0;
-    }
-
-    FILE *file = fopen(filename, "r");
-    if (file == NULL) {
-        return 0;
-    }
-
-    char buffer[letters];
-    ssize_t read_bytes = fread(buffer, sizeof(char), letters, file);
-    if (read_bytes < 0) {
-        fclose(file);
-        return 0;
-    }
-
-    ssize_t write_bytes = fwrite(buffer, sizeof(char), read_bytes, stdout);
-    fclose(file);
-
-    if (write_bytes != read_bytes) {
-        return 0;
-    }
-
-    return write_bytes;
+	return (w);
 }
