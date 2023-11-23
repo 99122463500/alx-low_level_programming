@@ -2,8 +2,8 @@
 #include <stdio.h>
 
 /**
- * print_binary - print binary of number
- * @n: decimal number to print binary
+ * print_binary - print binary representation of a number
+ * @n: decimal number to print as binary
  */
 void print_binary(unsigned long int n)
 {
