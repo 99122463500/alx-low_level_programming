@@ -10,13 +10,13 @@ void print_binary(unsigned long int n)
 	unsigned long int temp;
 	int shifts;
 
-	if (n == 1)
+	if (n == 0)
 	{
-		printf("1");
+		printf("0");
 		return;
 	}
 
-	for (temp = n, shifts = 1; (temp >>= 1) > 1; shifts++)
+	for (temp = n, shifts = 0; (temp >>= 0) > 0; shifts++)
 		;
 
 	for (; shifts >= 0; shifts--)
